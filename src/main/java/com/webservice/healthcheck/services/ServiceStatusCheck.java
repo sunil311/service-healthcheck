@@ -1,0 +1,108 @@
+/**
+ * 
+ */
+package com.webservice.healthcheck.services;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.stereotype.Service;
+
+import com.webservice.healthcheck.model.MyWebService;
+
+@Service
+public class ServiceStatusCheck {
+
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	public MyWebService getServiceStatusByName(String name) throws IOException {
+		MyWebService wbService = new MyWebService();
+
+		//wbService.setActive(getStatus(name));
+		wbService.setActive(getStatus(name,null));
+		wbService.setServiceName(name);
+		return wbService;
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean getStatus(String url) throws IOException {
+
+		boolean result = true;
+		try {
+			URL siteURL = new URL(url);
+			HttpURLConnection connection = (HttpURLConnection) siteURL
+					.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+
+			int code = connection.getResponseCode();
+			if (code != 200 && code !=401) {
+				result = false;
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean getStatus(String urlStr,String password) throws IOException {
+
+		boolean result = true;
+		HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(urlStr);
+        //URL url = null;
+        //URLConnection urlConnection = null;
+        try {
+          //url = new URL(urlStr);
+
+          
+          String userpassword = "UhgQA" + ":" + "UHGQA";
+          String encodedAuthorization = "Basic "
+            + new String(Base64.encodeBase64(userpassword.getBytes()));
+          httpPost.setHeader("Authorization", encodedAuthorization);
+          //httpclient.execute(httpPost);
+
+          //URLConnection urlConnection = url.openConnection();
+          
+          HttpResponse response =httpclient.execute(httpPost);
+          System.out.println(response.getStatusLine().getStatusCode());
+          if(response.getStatusLine().getStatusCode() != 404) {
+        	  result = true;
+              System.out.println("GOOD URL");
+          } else {
+        	  result = false;
+              System.out.println("BAD URL");
+          }
+        } catch (MalformedURLException ex) {
+        	result = false;
+           System.out.println("bad URL");
+        } catch (IOException ex) {
+        	result = false;
+           System.out.println("Failed opening connection. Perhaps WS is not up?");
+        } 
+		return result;
+	}
+}
