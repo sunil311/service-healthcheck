@@ -41,8 +41,8 @@
 				<tr>
 					<th>Service Id</th>
 					<th>Service Name</th>
-					<th>Service Status</th>
 					<th>Service URL</th>
+					<th>Service Status</th>
 					<th>Remove Service</th>
 				</tr>
 			</thead>
@@ -54,10 +54,10 @@
 						<td>${service.serviceUrl }</td>
 						<td><c:choose>
 								<c:when test="${service.active}">
-									<label style="color: green">is running.</label>
+									<label style="color: green">Running.</label>
 								</c:when>
 								<c:otherwise>
-									<label style="color: red">is not running.</label>
+									<label style="color: red">Stopped</label>
 								</c:otherwise>
 							</c:choose></td>
 						<td><a href="removeService?id=${service.id }">Remove</a></td>
