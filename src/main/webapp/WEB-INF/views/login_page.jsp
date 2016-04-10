@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Home</title>
+<jsp:include page="resources.jsp"></jsp:include>
 </head>
 <body>
 	<section>

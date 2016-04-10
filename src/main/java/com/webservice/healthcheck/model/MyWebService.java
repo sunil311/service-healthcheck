@@ -1,9 +1,20 @@
 package com.webservice.healthcheck.model;
 
-public class MyWebService {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "SERVICES")
+public class MyWebService {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	private String serviceName;
 	private boolean isActive;
+	private String serviceUrl;
 
 	public String getServiceName() {
 		return serviceName;
@@ -19,6 +30,22 @@ public class MyWebService {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getServiceUrl() {
+		return serviceUrl;
+	}
+
+	public void setServiceUrl(String serviceUrl) {
+		this.serviceUrl = serviceUrl;
 	}
 
 }
