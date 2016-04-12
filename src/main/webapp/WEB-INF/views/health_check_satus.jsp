@@ -16,8 +16,8 @@
 	$(function() {
 		$("#dialog-form").dialog({
 			autoOpen : false,
-            height: 200,
-            width:500
+       
+            width:600
 		});
 		$("#add_new_service").click(function() {
 			$("#dialog-form").dialog("open");
@@ -34,9 +34,41 @@
 </style>
 </head>
 <body>
-	<button id="add_new_service">Add new service</button>
-	<div align="center">
-		<table id="serviceTable" class="display" width="80%" cellspacing="0">
+<div class="header">
+ <nav role="navigation" class="navbar navbar-inverse container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">Healthcheck</a>
+        </div>
+        <!-- Collection of nav links and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="dashboard">Dashboard</a></li>
+                <li class="active"><a href="service_status">Services</a></li>
+               
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+	<div class="container">
+		<div class="inner-container">
+		<div class="heading">
+			<h1 class="page-header">Services</h1>
+		</div>
+			<div class="service">
+						
+							<a href="#myModal" class="btn btn-lg btn-primary" data-toggle="modal">Add new service</a>
+	<div>
+		<table id="serviceTable" class="display table">
 			<thead>
 				<tr>
 					<th>Service Id</th>
@@ -66,14 +98,48 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="dialog-form" title="Create new user">
-		<form action="addService">
-			<label for="serviceName">Service Name</label> 
-			<input type="text" name="serviceName" id="serviceName" placeholder="My Service Name"> <br />
-			<label for="serviceUrl">Service URL</label> 
-			<input type="text" name="serviceUrl" id="serviceUrl" placeholder="servie url"><br />
-			<input type="submit" tabindex="-1" value="Add Service"/>
-		</form>
-	</div>
+			
+			</div>
+	
+		</div>
+</div>
+	
+	
+	<div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create new user</h4>
+                </div>
+                <div class="modal-body">
+                
+                
+                
+                    <form  action="addService">
+        <div class="form-group">
+            <label for="serviceName" class="control-label ">Service Name</label>
+            <div class="">
+                <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="Service Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="serviceUrl" class="control-label">Service URL</label>
+            <div class="">
+                <input type="text" class="form-control" id="serviceUrl" name="serviceUrl" placeholder="Service URL">
+            </div>
+        </div>
+       
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" tabindex="-1" value="Add Service" class="btn btn-primary">Add Service </button>
+                       </form>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	
 </body>
 </html>
