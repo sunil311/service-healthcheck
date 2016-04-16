@@ -21,134 +21,156 @@ import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.model.MyWebService;
 
 @Service
-public class ServicehealthcheckProcess {
+public class ServicehealthcheckProcess
+{
 
-	@Autowired
-	ServicehealthcheckDao servicehealthcheckDao;
+  @Autowired
+  ServicehealthcheckDao servicehealthcheckDao;
 
-	/**
-	 * 
-	 * @param serviceName
-	 * @param serviceUrl
-	 */
-	public void addService(String serviceName, String serviceUrl) {
-		MyWebService wbService = new MyWebService();
-		wbService.setServiceName(serviceName);
-		wbService.setServiceUrl(serviceUrl);
-		wbService.setActive(getStatus(serviceUrl));
-		servicehealthcheckDao.saveService(wbService);
-	}
+  /**
+   * @param serviceName
+   * @param serviceUrl
+   * @throws IOException
+   */
+  public void addService(
+    String serviceName,
+    String serviceUrl,
+    String serviceUserId,
+    String servicePassword) throws IOException
+  {
+    MyWebService wbService = new MyWebService();
+    wbService.setServiceName(serviceName);
+    wbService.setServiceUrl(serviceUrl);
+    wbService.setUserId(serviceUserId);
+    wbService.setPassword(servicePassword);
+    wbService.setActive(getStatus(serviceUrl, serviceUserId, servicePassword));
+    servicehealthcheckDao.saveService(wbService);
+  }
 
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 */
-	public static boolean getStatus(String url) {
+  /**
+   * @param url
+   * @return
+   */
+  public static boolean getStatus(String url)
+  {
 
-		boolean result = true;
-		try {
-			URL siteURL = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection) siteURL
-					.openConnection();
-			connection.setRequestMethod("GET");
-			connection.connect();
+    boolean result = true;
+    try
+    {
+      URL siteURL = new URL(url);
+      HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+      connection.setRequestMethod("GET");
+      connection.connect();
 
-			int code = connection.getResponseCode();
-			if (code != 200 && code != 401) {
-				result = false;
-			}
-		} catch (Exception e) {
-			result = false;
-		}
-		return result;
-	}
+      int code = connection.getResponseCode();
+      if (code != 200 && code != 401)
+      {
+        result = false;
+      }
+    }
+    catch (Exception e)
+    {
+      result = false;
+    }
+    return result;
+  }
 
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 * @throws IOException
-	 */
-	public static boolean getStatus(String urlStr, String password)
-			throws IOException {
+  /**
+   * @param url
+   * @return
+   * @throws IOException
+   */
+  public static boolean getStatus(String urlStr, String userId, String password) throws IOException
+  {
 
-		boolean result = true;
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(urlStr);
-		// URL url = null;
-		// URLConnection urlConnection = null;
-		try {
-			// url = new URL(urlStr);
+    boolean result = true;
+    HttpClient httpclient = new DefaultHttpClient();
+    HttpPost httpPost = new HttpPost(urlStr);
+    // URL url = null;
+    // URLConnection urlConnection = null;
+    try
+    {
+      // url = new URL(urlStr);
 
-			String userpassword = "UhgQA" + ":" + "UHGQA";
-			String encodedAuthorization = "Basic "
-					+ new String(Base64.encodeBase64(userpassword.getBytes()));
-			httpPost.setHeader("Authorization", encodedAuthorization);
-			// httpclient.execute(httpPost);
+      // String userpassword = "UhgQA" + ":" + "UHGQA";
+      String encodedAuthorization = "Basic " + new String(Base64.encodeBase64(password.getBytes()));
+      httpPost.setHeader("Authorization", encodedAuthorization);
+      // httpclient.execute(httpPost);
 
-			// URLConnection urlConnection = url.openConnection();
+      // URLConnection urlConnection = url.openConnection();
 
-			HttpResponse response = httpclient.execute(httpPost);
-			System.out.println(response.getStatusLine().getStatusCode());
-			if (response.getStatusLine().getStatusCode() != 404) {
-				result = true;
-				System.out.println("GOOD URL");
-			} else {
-				result = false;
-				System.out.println("BAD URL");
-			}
-		} catch (MalformedURLException ex) {
-			result = false;
-			System.out.println("bad URL");
-		} catch (IOException ex) {
-			result = false;
-			System.out
-					.println("Failed opening connection. Perhaps WS is not up?");
-		}
-		return result;
-	}
+      HttpResponse response = httpclient.execute(httpPost);
+      System.out.println(response.getStatusLine().getStatusCode());
+      if (response.getStatusLine().getStatusCode() != 404)
+      {
+        result = true;
+        System.out.println("GOOD URL");
+      }
+      else
+      {
+        result = false;
+        System.out.println("BAD URL");
+      }
+    }
+    catch (MalformedURLException ex)
+    {
+      result = false;
+      System.out.println("bad URL");
+    }
+    catch (IOException ex)
+    {
+      result = false;
+      System.out.println("Failed opening connection. Perhaps WS is not up?");
+    }
+    return result;
+  }
 
-	/**
-	 * 
-	 * @param serviceId
-	 */
-	public void removeService(int serviceId) {
-		servicehealthcheckDao.removeService(serviceId);
+  /**
+   * @param serviceId
+   */
+  public void removeService(int serviceId)
+  {
+    servicehealthcheckDao.removeService(serviceId);
 
-	}
+  }
 
-	/**
-	 * 
-	 * @param myWebServices
-	 * @return
-	 */
-	public int stoppedServices(List<MyWebService> myWebServices) {
-		int count = 0;
-		if (myWebServices != null) {
-			for (MyWebService myWebService : myWebServices) {
-				if (!myWebService.isActive()) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
+  /**
+   * @param myWebServices
+   * @return
+   */
+  public int stoppedServices(List<MyWebService> myWebServices)
+  {
+    int count = 0;
+    if (myWebServices != null)
+    {
+      for (MyWebService myWebService : myWebServices)
+      {
+        if (!myWebService.isActive())
+        {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
 
-	/**
-	 * 
-	 * @param myWebServices
-	 * @return
-	 */
-	public int runningServices(List<MyWebService> myWebServices) {
-		int count = 0;
-		if (myWebServices != null) {
-			for (MyWebService myWebService : myWebServices) {
-				if (myWebService.isActive()) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
+  /**
+   * @param myWebServices
+   * @return
+   */
+  public int runningServices(List<MyWebService> myWebServices)
+  {
+    int count = 0;
+    if (myWebServices != null)
+    {
+      for (MyWebService myWebService : myWebServices)
+      {
+        if (myWebService.isActive())
+        {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
 }

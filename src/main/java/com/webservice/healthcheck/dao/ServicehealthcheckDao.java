@@ -6,17 +6,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webservice.healthcheck.model.MyWebService;
 
-/**
- * 
- * @author kuldeep
- * 
- */
 @Service
 public class ServicehealthcheckDao {
 	@Autowired
