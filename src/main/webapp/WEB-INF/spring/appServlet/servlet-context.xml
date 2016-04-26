@@ -20,8 +20,7 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-	<bean id="webServiceHealthChecker"
-		class="com.webservice.healthcheck.model.WebServiceHealthChecker">
+	<bean id="webServiceHealthChecker" class="com.webservice.healthcheck.dto.WebServiceHealthChecker">
 		<property name="serviceList" ref="serviceList"></property>
 	</bean>
 	<util:list id="serviceList">
@@ -31,7 +30,8 @@
 		<value>http://10.1.2.22:12100/integration/uhg//ValidateQuote</value>
 		<value>http://10.1.2.22:12100/integration/uhg/SpecialtyRates</value>
 		<value>http://10.1.2.22:12100/integration/uhg/SpecialtyPlans</value>
-		<value>http://10.1.2.22:12100/integration/uhg//ValidateSBPlanAvailability</value>
+		<value>http://10.1.2.22:12100/integration/uhg//ValidateSBPlanAvailability
+		</value>
 	</util:list>
 </beans>
  

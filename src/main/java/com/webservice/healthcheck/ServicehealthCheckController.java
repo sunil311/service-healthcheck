@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
+import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.process.ServicehealthcheckProcess;
 
@@ -20,12 +21,18 @@ public class ServicehealthCheckController {
 	ServicehealthcheckDao servicehealthcheckDao;
 	@Autowired
 	ServicehealthcheckProcess servicehealthcheckProcess;
-	
+	@Autowired
+	ServicehealthcheckHistoryDao servicehealthcheckHistoryDao;
+
 	@RequestMapping(value = "dashboard")
 	public String showServiceDashboard(ModelMap modelMap) {
-		List<MyWebService> myWebServices = servicehealthcheckDao.getRegisteredService();
-		modelMap.put("runningService",servicehealthcheckProcess.stoppedServices(myWebServices));
-		modelMap.put("stoppedServices", servicehealthcheckProcess.runningServices(myWebServices));
+		servicehealthcheckHistoryDao.getWebServiceHistory(1);
+		List<MyWebService> myWebServices = servicehealthcheckDao
+				.getRegisteredService();
+		modelMap.put("runningService",
+				servicehealthcheckProcess.stoppedServices(myWebServices));
+		modelMap.put("stoppedServices",
+				servicehealthcheckProcess.runningServices(myWebServices));
 		return "dashboard";
 	}
 

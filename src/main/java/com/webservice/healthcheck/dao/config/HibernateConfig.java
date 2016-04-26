@@ -16,6 +16,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 
 import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.model.WebServiceHistory;
 
 @Configuration
 public class HibernateConfig {
@@ -51,7 +52,9 @@ public class HibernateConfig {
 	public SessionFactory getSessionFactory(DataSource dataSource) {
 		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(
 				dataSource);
-		sessionBuilder.addAnnotatedClasses(MyWebService.class);
+		sessionBuilder.addAnnotatedClasses(WebServiceHistory.class,
+				MyWebService.class);
+
 		sessionBuilder.addProperties(getHibernateProperties());
 		return sessionBuilder.buildSessionFactory();
 	}

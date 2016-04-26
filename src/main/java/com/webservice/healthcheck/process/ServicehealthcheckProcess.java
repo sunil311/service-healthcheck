@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.model.WebServiceHistory;
 
 @Service
 public class ServicehealthcheckProcess {
@@ -150,5 +153,17 @@ public class ServicehealthcheckProcess {
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * 
+	 * @param webServiceHistories
+	 */
+	public void prepareWebServiceHistory(
+			List<WebServiceHistory> webServiceHistories) {
+		Map<Integer, WebServiceHistory> webServiceMap = new HashMap<Integer, WebServiceHistory>();
+		for (WebServiceHistory serviceHistory : webServiceHistories) {
+			webServiceMap.put(serviceHistory.getWebServiceId(), serviceHistory);
+		}
 	}
 }

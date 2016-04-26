@@ -6,11 +6,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.process.ServicehealthcheckProcess;
 
 /**
  * 
@@ -34,6 +34,10 @@ public class ServicehealthcheckDao {
 		List<MyWebService> myWebServices = (List<MyWebService>) criteria.list();
 		transaction.commit();
 		session.close();
+		for (MyWebService myWebService : myWebServices) {
+			myWebService.setActive(ServicehealthcheckProcess
+					.getStatus(myWebService.getServiceUrl()));
+		}
 		return myWebServices;
 	}
 
