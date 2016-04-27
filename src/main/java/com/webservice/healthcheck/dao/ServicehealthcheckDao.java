@@ -12,11 +12,6 @@ import org.springframework.stereotype.Service;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.process.ServicehealthcheckProcess;
 
-/**
- * 
- * @author kuldeep
- * 
- */
 @Service
 public class ServicehealthcheckDao {
 	@Autowired

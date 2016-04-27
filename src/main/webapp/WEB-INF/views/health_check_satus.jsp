@@ -129,6 +129,18 @@
                 <input type="text" class="form-control" id="serviceUrl" name="serviceUrl" placeholder="Service URL">
             </div>
         </div>
+        <div class="form-group">
+            <label for="serviceUserId" class="control-label">User Name</label>
+            <div class="">
+                <input type="text" class="form-control" id="serviceUserId" name="serviceUserId" placeholder="Service User Id">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="servicePassword" class="control-label">Password</label>
+            <div class="">
+                <input type="text" class="form-control" id="servicePassword" name="servicePassword" placeholder="Service Password">
+            </div>
+        </div>
        
                 </div>
                 <div class="modal-footer">

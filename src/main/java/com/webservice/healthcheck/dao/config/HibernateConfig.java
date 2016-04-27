@@ -18,6 +18,8 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
 
+;
+
 @Configuration
 public class HibernateConfig {
 	static Properties databaseProperties;

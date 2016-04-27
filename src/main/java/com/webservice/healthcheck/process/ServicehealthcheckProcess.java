@@ -23,6 +23,8 @@ import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
 
+;
+
 @Service
 public class ServicehealthcheckProcess {
 

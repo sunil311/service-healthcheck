@@ -8,44 +8,76 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SERVICES")
-public class MyWebService {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	private String serviceName;
-	private boolean isActive;
-	private String serviceUrl;
+public class MyWebService
+{
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
+  private String serviceName;
+  private boolean isActive;
+  private String serviceUrl;
+  private String userId;
 
-	public String getServiceName() {
-		return serviceName;
-	}
+  private String password;
 
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
+  public String getServiceName()
+  {
+    return serviceName;
+  }
 
-	public boolean isActive() {
-		return isActive;
-	}
+  public void setServiceName(String serviceName)
+  {
+    this.serviceName = serviceName;
+  }
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+  public boolean isActive()
+  {
+    return isActive;
+  }
 
-	public Integer getId() {
-		return id;
-	}
+  public void setActive(boolean isActive)
+  {
+    this.isActive = isActive;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public Integer getId()
+  {
+    return id;
+  }
 
-	public String getServiceUrl() {
-		return serviceUrl;
-	}
+  public void setId(Integer id)
+  {
+    this.id = id;
+  }
 
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
-	}
+  public String getServiceUrl()
+  {
+    return serviceUrl;
+  }
+
+  public void setServiceUrl(String serviceUrl)
+  {
+    this.serviceUrl = serviceUrl;
+  }
+
+  public String getUserId()
+  {
+    return userId;
+  }
+
+  public void setUserId(String userId)
+  {
+    this.userId = userId;
+  }
+
+  public String getPassword()
+  {
+    return password;
+  }
+
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
 
 }
