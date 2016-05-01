@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.model.WebServiceHistory;
 import com.webservice.healthcheck.process.ServicehealthcheckProcess;
 
 @Controller
@@ -32,24 +33,54 @@ public class ServicehealthCheckController {
 		return "dashboard";
 	}
 
-	@RequestMapping(value = "service_status")
-	public String getServiceStatus(ModelMap modelMap) {
+	@RequestMapping(value = "service_config")
+	public String getAllServices(ModelMap modelMap) {
 		modelMap.put("serviceList",
 				servicehealthcheckDao.getRegisteredService());
-		return "health_check_satus";
+		return "service_config";
 	}
 
 	@RequestMapping(value = "removeService")
 	public String removeService(ModelMap modelMap, int id,
 			HttpServletResponse response) {
 		servicehealthcheckProcess.removeService(id);
-		return "redirect:service_status";
+		return "redirect:service_config";
 	}
 
 	@RequestMapping(value = "addService")
 	public String addService(ModelMap modelMap, String serviceName,
-			String serviceUrl) {
+			String serviceUrl, String servicePassword, String serviceUserId) {
 		servicehealthcheckProcess.addService(serviceName, serviceUrl);
-		return "redirect:service_status";
+		return "redirect:service_config";
+	}
+
+	/**
+	 * Get data from service history, convert to proper format and render on UI
+	 * 
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping(value = "service_details")
+	public String getServiceStatus(ModelMap modelMap) {
+		modelMap.put("serviceMap",
+				servicehealthcheckProcess.prepareWebServiceHistory());
+		return "service_details";
+	}
+
+	/**
+	 * 
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping(value = "getServiceStatusDetails")
+	public String getServiceStatusDetails(ModelMap modelMap, int serviceId) {
+		List<WebServiceHistory> serviceHistories = servicehealthcheckProcess
+				.getServicesStatusById(serviceId);
+		if (serviceHistories != null) {
+			modelMap.put("serviceName", serviceHistories.get(0)
+					.getServiceName());
+		}
+		modelMap.put("serviceList", serviceHistories);
+		return "serviceStatusDetails";
 	}
 }

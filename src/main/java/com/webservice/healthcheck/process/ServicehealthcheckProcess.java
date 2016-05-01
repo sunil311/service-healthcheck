@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
+import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
 
@@ -30,6 +32,9 @@ public class ServicehealthcheckProcess {
 
 	@Autowired
 	ServicehealthcheckDao servicehealthcheckDao;
+
+	@Autowired
+	ServicehealthcheckHistoryDao servicehealthcheckHistoryDao;
 
 	/**
 	 * 
@@ -161,11 +166,30 @@ public class ServicehealthcheckProcess {
 	 * 
 	 * @param webServiceHistories
 	 */
-	public void prepareWebServiceHistory(
-			List<WebServiceHistory> webServiceHistories) {
-		Map<Integer, WebServiceHistory> webServiceMap = new HashMap<Integer, WebServiceHistory>();
+	public Map<Integer, List<WebServiceHistory>> prepareWebServiceHistory() {
+
+		List<WebServiceHistory> webServiceHistories = servicehealthcheckHistoryDao
+				.getWebServiceHistory();
+		Map<Integer, List<WebServiceHistory>> webServiceMap = new HashMap<Integer, List<WebServiceHistory>>();
+		List<WebServiceHistory> list = null;
 		for (WebServiceHistory serviceHistory : webServiceHistories) {
-			webServiceMap.put(serviceHistory.getWebServiceId(), serviceHistory);
+			list = webServiceMap.get(serviceHistory.getWebServiceId());
+			if (list == null) {
+				List<WebServiceHistory> lists = new ArrayList<WebServiceHistory>();
+				lists.add(serviceHistory);
+				webServiceMap.put(serviceHistory.getWebServiceId(), lists);
+			} else {
+				list.add(serviceHistory);
+				webServiceMap.put(serviceHistory.getWebServiceId(),
+						list.subList(0, 1));
+			}
 		}
+		return webServiceMap;
+	}
+
+	public List<WebServiceHistory> getServicesStatusById(int serviceId) {
+		servicehealthcheckHistoryDao.getWebServiceHistory(serviceId);
+		return servicehealthcheckHistoryDao
+				.getWebServiceHistoryByServiceId(serviceId);
 	}
 }

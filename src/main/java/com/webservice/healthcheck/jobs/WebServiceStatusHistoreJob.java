@@ -27,11 +27,13 @@ public class WebServiceStatusHistoreJob {
 	 * Cron job to be executed every 4 hour
 	 */
 	// @Scheduled(cron = "0 0 0/4 * * ?")
-	@Scheduled(fixedDelay = 600000) //every 10 min
+	@Scheduled(fixedDelay = 600000)
+	// every 10 min
 	public void dumpWebserviceHealthcheckStats() {
 		List<MyWebService> webServices = servicehealthcheckDao
 				.getRegisteredService();
 		saveWebserviceHistory(webServices);
+		System.out.println("Job Disabled for now");
 	}
 
 	/**
@@ -39,7 +41,6 @@ public class WebServiceStatusHistoreJob {
 	 * @param webServices
 	 */
 	private void saveWebserviceHistory(List<MyWebService> webServices) {
-		List<WebServiceHistory> webServiceHistoryList = new ArrayList<WebServiceHistory>();
 		for (MyWebService webService : webServices) {
 			WebServiceHistory webServiceHistory = new WebServiceHistory();
 			webServiceHistory.setActive(webService.isActive());
