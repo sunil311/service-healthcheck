@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.webservice.healthcheck;
 
 import org.apache.commons.lang3.StringUtils;

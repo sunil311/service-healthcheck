@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.webservice.healthcheck.process;
 
 import java.io.IOException;
@@ -26,8 +23,6 @@ import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
-
-;
 
 @Service
 public class ServicehealthcheckProcess {

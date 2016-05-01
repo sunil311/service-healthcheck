@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.webservice.healthcheck;
 
 import org.springframework.stereotype.Controller;

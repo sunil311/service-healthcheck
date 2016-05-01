@@ -15,11 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.webservice.healthcheck.model.WebServiceHistory;
 
-/**
- * 
- * @author kuldeep
- * 
- */
 @Service
 public class ServicehealthcheckHistoryDao {
 	@Autowired
