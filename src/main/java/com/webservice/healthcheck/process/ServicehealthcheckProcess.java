@@ -17,6 +17,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -133,16 +135,16 @@ public class ServicehealthcheckProcess {
 	 * @param myWebServices
 	 * @return
 	 */
-	public int stoppedServices(List<MyWebService> myWebServices) {
-		int count = 0;
+	public List<MyWebService> stoppedServices(List<MyWebService> myWebServices) {
+		List<MyWebService> webServices = new ArrayList<MyWebService>();
 		if (myWebServices != null) {
 			for (MyWebService myWebService : myWebServices) {
 				if (!myWebService.isActive()) {
-					count++;
+					webServices.add(myWebService);
 				}
 			}
 		}
-		return count;
+		return webServices;
 	}
 
 	/**
@@ -150,16 +152,16 @@ public class ServicehealthcheckProcess {
 	 * @param myWebServices
 	 * @return
 	 */
-	public int runningServices(List<MyWebService> myWebServices) {
-		int count = 0;
+	public List<MyWebService> runningServices(List<MyWebService> myWebServices) {
+		List<MyWebService> webServices = new ArrayList<MyWebService>();
 		if (myWebServices != null) {
 			for (MyWebService myWebService : myWebServices) {
 				if (myWebService.isActive()) {
-					count++;
+					webServices.add(myWebService);
 				}
 			}
 		}
-		return count;
+		return webServices;
 	}
 
 	/**
@@ -191,5 +193,24 @@ public class ServicehealthcheckProcess {
 		servicehealthcheckHistoryDao.getWebServiceHistory(serviceId);
 		return servicehealthcheckHistoryDao
 				.getWebServiceHistoryByServiceId(serviceId);
+	}
+
+	/**
+	 * 
+	 * @param stoppedServices
+	 * @param runningServices
+	 * @return
+	 * @throws JSONException 
+	 */
+	public JSONArray createJsonForGraph(List<MyWebService> stoppedServices,
+			List<MyWebService> runningServices) throws JSONException {
+		JSONArray array = new JSONArray();
+		for (MyWebService myWebService : runningServices) {
+			array.put(new JSONArray("['" + myWebService.getServiceName() + "', 1, 'green']"));
+		}
+		for (MyWebService myWebService : stoppedServices) {
+			array.put(new JSONArray("['" + myWebService.getServiceName() + "', 1, 'red']"));
+		}
+		return array;
 	}
 }

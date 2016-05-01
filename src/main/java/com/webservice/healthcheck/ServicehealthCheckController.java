@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,13 +24,17 @@ public class ServicehealthCheckController {
 	ServicehealthcheckProcess servicehealthcheckProcess;
 
 	@RequestMapping(value = "dashboard")
-	public String showServiceDashboard(ModelMap modelMap) {
+	public String showServiceDashboard(ModelMap modelMap) throws JSONException {
 		List<MyWebService> myWebServices = servicehealthcheckDao
 				.getRegisteredService();
-		modelMap.put("runningService",
-				servicehealthcheckProcess.stoppedServices(myWebServices));
-		modelMap.put("stoppedServices",
-				servicehealthcheckProcess.runningServices(myWebServices));
+		List<MyWebService> stoppedServices = servicehealthcheckProcess
+				.stoppedServices(myWebServices);
+		List<MyWebService> runningServices = servicehealthcheckProcess
+				.runningServices(myWebServices);
+		modelMap.put("stoppedServicesCount", stoppedServices.size());
+		modelMap.put("runningServiceCount", runningServices.size());
+		modelMap.put("servicesJsonList", servicehealthcheckProcess
+				.createJsonForGraph(stoppedServices, runningServices));
 		return "dashboard";
 	}
 

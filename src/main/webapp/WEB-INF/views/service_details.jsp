@@ -40,6 +40,10 @@
 			<div class="heading">
 				<h1 class="page-header">Services Details For Last 24 Hour</h1>
 			</div>
+			<h3 class="page-header">
+				<a href="sendnotification">Click Here </a> to Send webservice status
+				notification
+			</h3>
 			<div class="service">
 				<div>
 					<table id="serviceTable" class="display table">
@@ -62,7 +66,10 @@
 										<td>${service.serviceUrl }</td>
 										<td>${service.active }</td>
 										<td>${service.lastStatusTime }</td>
-										<td><a href="getServiceStatusDetails?serviceId=${service.webServiceId }">Get Details</a></td>
+										<td><a
+											href="getServiceStatusDetails?serviceId=${service.webServiceId }">Get
+												Details</a>
+										</td>
 									</c:forEach>
 								</tr>
 							</c:forEach>

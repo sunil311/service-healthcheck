@@ -1,6 +1,5 @@
 package com.webservice.healthcheck.jobs;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class WebServiceStatusHistoreJob {
 		List<MyWebService> webServices = servicehealthcheckDao
 				.getRegisteredService();
 		saveWebserviceHistory(webServices);
-		System.out.println("Job Disabled for now");
 	}
 
 	/**
