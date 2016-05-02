@@ -1,5 +1,6 @@
 package com.webservice.healthcheck.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -20,9 +21,10 @@ public class ServicehealthcheckDao {
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	public List<MyWebService> getRegisteredService() {
+	public List<MyWebService> getRegisteredService() throws IOException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		Criteria criteria = session.createCriteria(MyWebService.class);
@@ -31,7 +33,7 @@ public class ServicehealthcheckDao {
 		session.close();
 		for (MyWebService myWebService : myWebServices) {
 			myWebService.setActive(ServicehealthcheckProcess
-					.getStatus(myWebService.getServiceUrl()));
+					.getStatus(myWebService.getServiceUrl(),myWebService.getUserId(),myWebService.getPassword()));
 		}
 		return myWebServices;
 	}

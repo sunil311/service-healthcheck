@@ -1,5 +1,6 @@
 package com.webservice.healthcheck.jobs;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +25,12 @@ public class WebServiceStatusHistoreJob {
 
 	/**
 	 * Cron job to be executed every 4 hour
+	 * @throws IOException 
 	 */
 	// @Scheduled(cron = "0 0 0/4 * * ?")
 	@Scheduled(fixedDelay = 600000)
 	// every 10 min
-	public void dumpWebserviceHealthcheckStats() {
+	public void dumpWebserviceHealthcheckStats() throws IOException {
 		List<MyWebService> webServices = servicehealthcheckDao
 				.getRegisteredService();
 		saveWebserviceHistory(webServices);

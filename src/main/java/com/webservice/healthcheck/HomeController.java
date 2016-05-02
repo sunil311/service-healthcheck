@@ -22,6 +22,6 @@ public class HomeController {
 			modelMap.put("message", "Invalid Credentials!");
 			return "login_page";
 		}
-		return "home";
+		return "service_config";
 	}
 }

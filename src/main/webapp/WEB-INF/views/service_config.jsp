@@ -47,27 +47,20 @@
 		<table id="serviceTable" class="display table">
 			<thead>
 				<tr>
-					<th>Service Id</th>
 					<th>Service Name</th>
 					<th>Service URL</th>
-					<th>Service Status</th>
-					<th>Remove Service</th>
+					<th>Service UserId</th>
+					<th>Service Password</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${serviceList }" var="service">
 					<tr>
-						<td>${service.id }</td>
 						<td>${service.serviceName}</td>
 						<td>${service.serviceUrl }</td>
-						<td><c:choose>
-								<c:when test="${service.active}">
-									<label style="color: green">Running.</label>
-								</c:when>
-								<c:otherwise>
-									<label style="color: red">Stopped</label>
-								</c:otherwise>
-							</c:choose></td>
+						<td>${service.userId }</td>
+						<td>${service.password }</td>
 						<td><a href="removeService?id=${service.id }">Remove</a></td>
 					</tr>
 				</c:forEach>
