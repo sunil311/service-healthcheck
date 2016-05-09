@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.connecture.integration.esb.model.ESBResponse;
+import com.webservice.common.ValidateQuoteResult;
+import com.webservice.common.ValidationMessage;
 import com.webservice.exception.UnexpectedProcessException;
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
@@ -30,6 +34,11 @@ public class ServicehealthcheckProcess
 
   @Autowired
   ServicehealthcheckHistoryDao servicehealthcheckHistoryDao;
+
+  private static final Log LOGGER = LogFactory.getLog(ESBHelper.class);
+  public static final String SERVICE_DOWN_STATUS_CODE = "800"; // either ESB or
+                                                               // external
+                                                               // service down
 
   /**
    * @param serviceName
@@ -68,64 +77,66 @@ public class ServicehealthcheckProcess
     String xmlString,
     String esbUri,
     String esbUsername,
-    String esbPassword) throws UnexpectedProcessException, JAXBException, IOException
+    String esbPassword)
   {
-    HttpResponse httpResponse = ESBHelper.sendToHTTP(xmlString, esbUri, esbUsername, esbPassword);
-    if (httpResponse == null)
+    boolean status = false;
+    ValidateQuoteResult validateQuoteResult = new ValidateQuoteResult();
+    try
     {
-      return false;
-    }
-    ESBResponse esbResponse = ESBHelper.unmarshallEsbResponse(httpResponse);
+      HttpResponse httpResponse = ESBHelper.sendToHTTP(xmlString, esbUri, esbUsername, esbPassword);
+      if (httpResponse == null)
+      {
+        status = false;
+      }
+      ESBResponse esbResponse = ESBHelper.unmarshallEsbResponse(httpResponse);
 
-    String esbResponseCode = esbResponse.getCode();
+      String esbResponseCode = esbResponse.getCode();
 
-    if (ESBHelper.isSuccessfulEsbResponseCode(esbResponseCode))
-    {
+      if (ESBHelper.isSuccessfulEsbResponseCode(esbResponseCode))
+      {
+        status = true;
+      }
+      else if (ESBHelper.isExternalEndpointDown(esbResponseCode))
+      {
+        String esbResponseMessage = esbResponse.getMessage();
+        LOGGER.error("ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: "
+          + esbResponseCode + " Esb Response Message: " + esbResponseMessage);
+        validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
 
+        List<ValidationMessage> validationMessages = new ArrayList<ValidationMessage>();
+        ValidationMessage message = new ValidationMessage();
+        message.setType(SERVICE_DOWN_STATUS_CODE);
+        message.setErrorCode("");
+        validationMessages.add(message);
+        validateQuoteResult.setFatalErrorMessage(ESBHelper.EXTERNAL_ENDPOINT_ERROR_MESSAGE);
+        validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+        validateQuoteResult.setValidationMessages(validationMessages);
+      }
+      else
+      {
+        String esbResponseMessage = esbResponse.getMessage();
+        LOGGER.error("ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: "
+          + esbResponseCode + " Esb Response Message: " + esbResponseMessage);
+        validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+
+        List<ValidationMessage> validationMessages = new ArrayList<ValidationMessage>();
+        ValidationMessage message = new ValidationMessage();
+        message.setType(SERVICE_DOWN_STATUS_CODE);
+        message.setErrorCode("");
+        validationMessages.add(message);
+        validateQuoteResult
+          .setFatalErrorMessage("The service is temporarily unavailable. Please try again later.");
+        validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+        validateQuoteResult.setValidationMessages(validationMessages);
+      }
     }
-    else if (ESBHelper.isExternalEndpointDown(esbResponseCode))
+    catch (Exception e)
     {
-      String esbResponseMessage = esbResponse.getMessage();
-      /*
-       * LOG.error(
-       * "ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: " +
-       * esbResponseCode + " Esb Response Message: " + esbResponseMessage); //
-       * validateQuoteResult.setStatusCode("800");
-       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
-       * List<ValidationMessage> validationMessages = new
-       * ArrayList<ValidationMessage>(); ValidationMessage message = new
-       * ValidationMessage(); // message.setType("800");
-       * message.setType(SERVICE_DOWN_STATUS_CODE); message.setErrorCode("");
-       * validationMessages.add(message);
-       * validateQuoteResult.setFatalErrorMessage
-       * (ESBHelper.EXTERNAL_ENDPOINT_ERROR_MESSAGE); //
-       * validateQuoteResult.setStatusCode("800");
-       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
-       * validateQuoteResult.setValidationMessages(validationMessages);
-       */
+      LOGGER.error(e);
+      status = false;
     }
-    else
-    {
-      String esbResponseMessage = esbResponse.getMessage();
-      /*
-       * LOG.error(
-       * "ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: " +
-       * esbResponseCode + " Esb Response Message: " + esbResponseMessage); //
-       * validateQuoteResult.setStatusCode("800");
-       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
-       * List<ValidationMessage> validationMessages = new
-       * ArrayList<ValidationMessage>(); ValidationMessage message = new
-       * ValidationMessage(); // message.setType("800");
-       * message.setType(SERVICE_DOWN_STATUS_CODE); message.setErrorCode("");
-       * validationMessages.add(message);
-       * validateQuoteResult.setFatalErrorMessage
-       * ("The service is temporarily unavailable. Please try again later."); //
-       * validateQuoteResult.setStatusCode("800");
-       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
-       * validateQuoteResult.setValidationMessages(validationMessages);
-       */
-    }
-    return true;
+    return status;
+
   }
 
   /**
