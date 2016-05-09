@@ -1,5 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<repositories>
+		<repository>
+			<id>connecture-maven</id>
+			<name>Connecture Maven Repository</name>
+			<url>http://svn.ct.com:8280/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>service-healthcheck</groupId>
 	<artifactId>service-healthcheck</artifactId>
@@ -225,6 +232,17 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.connecture.integration</groupId>
+			<artifactId>esb-model</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

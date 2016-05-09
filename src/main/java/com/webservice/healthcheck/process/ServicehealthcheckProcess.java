@@ -1,33 +1,30 @@
 package com.webservice.healthcheck.process;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
+import javax.xml.bind.JAXBException;
+
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.connecture.integration.esb.model.ESBResponse;
+import com.webservice.exception.UnexpectedProcessException;
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
+import com.webservice.helper.ESBHelper;
 
 @Service
 public class ServicehealthcheckProcess
 {
-
   @Autowired
   ServicehealthcheckDao servicehealthcheckDao;
 
@@ -38,100 +35,97 @@ public class ServicehealthcheckProcess
    * @param serviceName
    * @param serviceUrl
    * @throws IOException
+   * @throws UnexpectedProcessException
+   * @throws JAXBException
    */
   public void addService(
     String serviceName,
     String serviceUrl,
     String serviceUserId,
-    String servicePassword) throws IOException
+    String servicePassword) throws IOException, JAXBException, UnexpectedProcessException
   {
     MyWebService wbService = new MyWebService();
     wbService.setServiceName(serviceName);
     wbService.setServiceUrl(serviceUrl);
     wbService.setUserId(serviceUserId);
     wbService.setPassword(servicePassword);
-    wbService.setActive(getStatus(serviceUrl, serviceUserId, servicePassword));
+    String xml2String = ESBHelper.getXMLasString();
+    wbService.setActive(getStatus(xml2String, serviceUrl, serviceUserId, servicePassword));
     servicehealthcheckDao.saveService(wbService);
   }
 
   /**
-   * @param url
+   * @param xmlString
+   * @param esbUri
+   * @param esbUsername
+   * @param esbPassword
    * @return
-   */
-  public static boolean getStatus(String url)
-  {
-
-    boolean result = true;
-    try
-    {
-      URL siteURL = new URL(url);
-      HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-      connection.setRequestMethod("GET");
-      connection.connect();
-
-      int code = connection.getResponseCode();
-      if (code != 200 && code != 401)
-      {
-        result = false;
-      }
-    }
-    catch (Exception e)
-    {
-      result = false;
-    }
-    return result;
-  }
-
-  /**
-   * @param url
-   * @return
+   * @throws UnexpectedProcessException
+   * @throws JAXBException
    * @throws IOException
    */
-  public static boolean getStatus(String urlStr, String userId, String password) throws IOException
+  public static boolean getStatus(
+    String xmlString,
+    String esbUri,
+    String esbUsername,
+    String esbPassword) throws UnexpectedProcessException, JAXBException, IOException
   {
-
-    boolean result = true;
-    HttpClient httpclient = new DefaultHttpClient();
-    HttpPost httpPost = new HttpPost(urlStr);
-    // URL url = null;
-    // URLConnection urlConnection = null;
-    try
+    HttpResponse httpResponse = ESBHelper.sendToHTTP(xmlString, esbUri, esbUsername, esbPassword);
+    if (httpResponse == null)
     {
-      // url = new URL(urlStr);
-
-      String userpassword = userId + ":" + password;
-      // String userpassword = "UhgQA" + ":" + "UHGQA";
-      String encodedAuthorization = "Basic "
-        + new String(Base64.encodeBase64(userpassword.getBytes()));
-      httpPost.setHeader("Authorization", encodedAuthorization);
-      // httpclient.execute(httpPost);
-
-      // URLConnection urlConnection = url.openConnection();
-
-      HttpResponse response = httpclient.execute(httpPost);
-      System.out.println(response.getStatusLine().getStatusCode());
-      if (response.getStatusLine().getStatusCode() != 404)
-      {
-        result = true;
-        System.out.println("GOOD URL");
-      }
-      else
-      {
-        result = false;
-        System.out.println("BAD URL");
-      }
+      return false;
     }
-    catch (MalformedURLException ex)
+    ESBResponse esbResponse = ESBHelper.unmarshallEsbResponse(httpResponse);
+
+    String esbResponseCode = esbResponse.getCode();
+
+    if (ESBHelper.isSuccessfulEsbResponseCode(esbResponseCode))
     {
-      result = false;
-      System.out.println("bad URL");
+
     }
-    catch (IOException ex)
+    else if (ESBHelper.isExternalEndpointDown(esbResponseCode))
     {
-      result = false;
-      System.out.println("Failed opening connection. Perhaps WS is not up?");
+      String esbResponseMessage = esbResponse.getMessage();
+      /*
+       * LOG.error(
+       * "ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: " +
+       * esbResponseCode + " Esb Response Message: " + esbResponseMessage); //
+       * validateQuoteResult.setStatusCode("800");
+       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+       * List<ValidationMessage> validationMessages = new
+       * ArrayList<ValidationMessage>(); ValidationMessage message = new
+       * ValidationMessage(); // message.setType("800");
+       * message.setType(SERVICE_DOWN_STATUS_CODE); message.setErrorCode("");
+       * validationMessages.add(message);
+       * validateQuoteResult.setFatalErrorMessage
+       * (ESBHelper.EXTERNAL_ENDPOINT_ERROR_MESSAGE); //
+       * validateQuoteResult.setStatusCode("800");
+       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+       * validateQuoteResult.setValidationMessages(validationMessages);
+       */
     }
-    return result;
+    else
+    {
+      String esbResponseMessage = esbResponse.getMessage();
+      /*
+       * LOG.error(
+       * "ESB FAILED TO SEND VALIDATE QUOTE REQUEST ----> Esb Response Code: " +
+       * esbResponseCode + " Esb Response Message: " + esbResponseMessage); //
+       * validateQuoteResult.setStatusCode("800");
+       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+       * List<ValidationMessage> validationMessages = new
+       * ArrayList<ValidationMessage>(); ValidationMessage message = new
+       * ValidationMessage(); // message.setType("800");
+       * message.setType(SERVICE_DOWN_STATUS_CODE); message.setErrorCode("");
+       * validationMessages.add(message);
+       * validateQuoteResult.setFatalErrorMessage
+       * ("The service is temporarily unavailable. Please try again later."); //
+       * validateQuoteResult.setStatusCode("800");
+       * validateQuoteResult.setStatusCode(SERVICE_DOWN_STATUS_CODE);
+       * validateQuoteResult.setValidationMessages(validationMessages);
+       */
+    }
+    return true;
   }
 
   /**
@@ -238,4 +232,5 @@ public class ServicehealthcheckProcess
     }
     return array;
   }
+
 }

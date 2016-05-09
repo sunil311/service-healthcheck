@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.webservice.exception.UnexpectedProcessException;
 import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
@@ -26,7 +28,8 @@ public class ServicehealthCheckController
   ServicehealthcheckProcess servicehealthcheckProcess;
 
   @RequestMapping(value = "dashboard")
-  public String showServiceDashboard(ModelMap modelMap) throws JSONException, IOException
+  public String showServiceDashboard(ModelMap modelMap)
+    throws JSONException, IOException, JAXBException, UnexpectedProcessException
   {
     List<MyWebService> myWebServices = servicehealthcheckDao.getRegisteredService();
     List<MyWebService> stoppedServices = servicehealthcheckProcess.stoppedServices(myWebServices);
@@ -39,7 +42,8 @@ public class ServicehealthCheckController
   }
 
   @RequestMapping(value = "service_config")
-  public String getAllServices(ModelMap modelMap) throws IOException
+  public String getAllServices(ModelMap modelMap)
+    throws IOException, JAXBException, UnexpectedProcessException
   {
     modelMap.put("serviceList", servicehealthcheckDao.getRegisteredService());
     return "service_config";
@@ -58,7 +62,7 @@ public class ServicehealthCheckController
     String serviceName,
     String serviceUrl,
     String servicePassword,
-    String serviceUserId) throws IOException
+    String serviceUserId) throws IOException, JAXBException, UnexpectedProcessException
   {
     servicehealthcheckProcess.addService(serviceName, serviceUrl, serviceUserId, servicePassword);
     return "redirect:service_config";
