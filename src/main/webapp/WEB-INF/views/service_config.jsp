@@ -50,7 +50,7 @@
 					<th>Service Name</th>
 					<th>Service URL</th>
 					<th>Service UserId</th>
-					<th>Service Password</th>
+					<th></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -60,7 +60,7 @@
 						<td>${service.serviceName}</td>
 						<td>${service.serviceUrl }</td>
 						<td>${service.userId }</td>
-						<td>${service.password }</td>
+						<td><a href="">Edit</a></td>
 						<td><a href="removeService?id=${service.id }">Remove</a></td>
 					</tr>
 				</c:forEach>

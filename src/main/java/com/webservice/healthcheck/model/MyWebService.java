@@ -14,10 +14,9 @@ public class MyWebService
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
   private String serviceName;
-  private boolean isActive;
+  private String status;
   private String serviceUrl;
   private String userId;
-
   private String password;
 
   public String getServiceName()
@@ -29,17 +28,7 @@ public class MyWebService
   {
     this.serviceName = serviceName;
   }
-
-  public boolean isActive()
-  {
-    return isActive;
-  }
-
-  public void setActive(boolean isActive)
-  {
-    this.isActive = isActive;
-  }
-
+  
   public Integer getId()
   {
     return id;
@@ -48,6 +37,16 @@ public class MyWebService
   public void setId(Integer id)
   {
     this.id = id;
+  }
+
+  public String getStatus()
+  {
+    return status;
+  }
+
+  public void setStatus(String status)
+  {
+    this.status = status;
   }
 
   public String getServiceUrl()

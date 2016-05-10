@@ -59,7 +59,7 @@ public class ServicehealthcheckProcess
     wbService.setUserId(serviceUserId);
     wbService.setPassword(servicePassword);
     String xml2String = ESBHelper.getXMLasString();
-    wbService.setActive(getStatus(xml2String, serviceUrl, serviceUserId, servicePassword));
+    wbService.setStatus(getStatus(xml2String, serviceUrl, serviceUserId, servicePassword));
     servicehealthcheckDao.saveService(wbService);
   }
 
@@ -73,20 +73,20 @@ public class ServicehealthcheckProcess
    * @throws JAXBException
    * @throws IOException
    */
-  public static boolean getStatus(
+  public static String getStatus(
     String xmlString,
     String esbUri,
     String esbUsername,
     String esbPassword)
   {
-    boolean status = false;
+    String status = "Failure";
     ValidateQuoteResult validateQuoteResult = new ValidateQuoteResult();
     try
     {
       HttpResponse httpResponse = ESBHelper.sendToHTTP(xmlString, esbUri, esbUsername, esbPassword);
       if (httpResponse == null)
       {
-        status = false;
+        status = "Failure";
       }
       ESBResponse esbResponse = ESBHelper.unmarshallEsbResponse(httpResponse);
 
@@ -94,7 +94,7 @@ public class ServicehealthcheckProcess
 
       if (ESBHelper.isSuccessfulEsbResponseCode(esbResponseCode))
       {
-        status = true;
+        status = "Success";
       }
       else if (ESBHelper.isExternalEndpointDown(esbResponseCode))
       {
@@ -133,7 +133,7 @@ public class ServicehealthcheckProcess
     catch (Exception e)
     {
       LOGGER.error(e);
-      status = false;
+      status = "Failure";
     }
     return status;
 
@@ -159,7 +159,7 @@ public class ServicehealthcheckProcess
     {
       for (MyWebService myWebService : myWebServices)
       {
-        if (!myWebService.isActive())
+        if (!("Failure".equalsIgnoreCase(myWebService.getStatus())))
         {
           webServices.add(myWebService);
         }
@@ -179,7 +179,7 @@ public class ServicehealthcheckProcess
     {
       for (MyWebService myWebService : myWebServices)
       {
-        if (myWebService.isActive())
+        if ("Success".equalsIgnoreCase(myWebService.getStatus()))
         {
           webServices.add(myWebService);
         }

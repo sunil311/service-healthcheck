@@ -53,7 +53,7 @@
 						<tbody>
 							<c:forEach var="service" items="${serviceList}">
 								<tr>
-									<td>${service.active }</td>
+									<td>${service.status }</td>
 									<td>${service.lastStatusTime }</td>
 								</tr>
 							</c:forEach>

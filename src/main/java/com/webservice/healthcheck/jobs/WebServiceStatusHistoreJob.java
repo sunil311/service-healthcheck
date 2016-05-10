@@ -52,7 +52,7 @@ public class WebServiceStatusHistoreJob
     for (MyWebService webService : webServices)
     {
       WebServiceHistory webServiceHistory = new WebServiceHistory();
-      webServiceHistory.setActive(webService.isActive());
+      webServiceHistory.setStatus(webService.getStatus());
       webServiceHistory.setLastStatusTime(new Date());
       webServiceHistory.setServiceName(webService.getServiceName());
       webServiceHistory.setServiceUrl(webService.getServiceUrl());

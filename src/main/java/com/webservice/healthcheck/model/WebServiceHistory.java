@@ -16,7 +16,7 @@ public class WebServiceHistory {
 	private Integer id;
 	private String serviceName;
 	private String serviceUrl;
-	private boolean isActive;
+	private String status;
 	private Date lastStatusTime;
 	private Integer webServiceId;
 
@@ -44,13 +44,15 @@ public class WebServiceHistory {
 		this.serviceUrl = serviceUrl;
 	}
 
-	public boolean isActive() {
-		return isActive;
-	}
+	public String getStatus()
+  {
+    return status;
+  }
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+  public void setStatus(String status)
+  {
+    this.status = status;
+  }
 
 	public Date getLastStatusTime() {
 		return lastStatusTime;

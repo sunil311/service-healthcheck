@@ -40,16 +40,15 @@
 			<div class="heading">
 				<h1 class="page-header">Services Details For Last 24 Hour</h1>
 			</div>
-			<h3 class="page-header">
+			<!-- <h3 class="page-header">
 				<a href="sendnotification">Click Here </a> to Send webservice status
 				notification
-			</h3>
+			</h3> -->
 			<div class="service">
 				<div>
 					<table id="serviceTable" class="display table">
 						<thead>
 							<tr>
-								<th>Service Id</th>
 								<th>Service Name</th>
 								<th>Service URL</th>
 								<th>Service Status</th>
@@ -61,10 +60,9 @@
 							<c:forEach var="entry" items="${serviceMap}">
 								<tr>
 									<c:forEach var="service" items="${entry.value}">
-										<td>${service.webServiceId }</td>
 										<td>${service.serviceName }</td>
 										<td>${service.serviceUrl }</td>
-										<td>${service.active }</td>
+										<td>${service.status }</td>
 										<td>${service.lastStatusTime }</td>
 										<td><a
 											href="getServiceStatusDetails?serviceId=${service.webServiceId }">Get

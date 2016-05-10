@@ -50,7 +50,7 @@ public class ServicehealthcheckDao
        * .getServiceUrl(),myWebService.getUserId(),myWebService.getPassword()));
        */
 
-      myWebService.setActive(ServicehealthcheckProcess.getStatus(xml2String,
+      myWebService.setStatus(ServicehealthcheckProcess.getStatus(xml2String,
         myWebService.getServiceUrl(), myWebService.getUserId(), myWebService.getPassword()));
 
     }
