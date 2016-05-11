@@ -43,7 +43,7 @@ public class ServicehealthCheckController
 
   @RequestMapping(value = "service_config")
   public String getAllServices(ModelMap modelMap)
-    throws IOException, JAXBException, UnexpectedProcessException
+    throws IOException, JAXBException, UnexpectedProcessException, JSONException
   {
     modelMap.put("serviceList", servicehealthcheckDao.getRegisteredService());
     return "service_config";

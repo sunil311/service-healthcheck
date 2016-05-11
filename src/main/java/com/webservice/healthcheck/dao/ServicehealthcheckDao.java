@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,10 +30,11 @@ public class ServicehealthcheckDao
    * @throws IOException
    * @throws UnexpectedProcessException
    * @throws JAXBException
+ * @throws JSONException 
    */
   @SuppressWarnings("unchecked")
   public List<MyWebService> getRegisteredService()
-    throws IOException, JAXBException, UnexpectedProcessException
+    throws IOException, JAXBException, UnexpectedProcessException, JSONException
   {
     Session session = sessionFactory.openSession();
     Transaction transaction = session.beginTransaction();
@@ -49,9 +52,10 @@ public class ServicehealthcheckDao
        * .getStatus(myWebService
        * .getServiceUrl(),myWebService.getUserId(),myWebService.getPassword()));
        */
-
-      myWebService.setStatus(ServicehealthcheckProcess.getStatus(xml2String,
-        myWebService.getServiceUrl(), myWebService.getUserId(), myWebService.getPassword()));
+    	JSONObject httpResponceJson = ServicehealthcheckProcess.getStatus(xml2String,
+    	        myWebService.getServiceUrl(), myWebService.getUserId(), myWebService.getPassword());
+      myWebService.setStatus(httpResponceJson.getString("status"));
+      myWebService.setExecutionTime(httpResponceJson.getLong("executionTime"));
 
     }
     return myWebServices;

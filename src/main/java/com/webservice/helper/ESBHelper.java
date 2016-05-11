@@ -25,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.connecture.integration.esb.model.ESBResponse;
 import com.webservice.exception.UnexpectedProcessException;
@@ -62,20 +63,24 @@ public class ESBHelper
     return EXTERNAL_SERVICE_ERROR_RESPONSE_CODE.equals(esbResponseCode);
   }
 
-  public static HttpResponse sendToHTTP(
+  public static JSONObject sendToHTTP(
     String xmlString,
     String esbUri,
     String esbUsername,
     String esbPassword) throws SocketTimeoutException
   {
     // uhgEsbRequestTransactionHandler.preESBCallProcess();
+	  HttpResponse httpResponse =null;
+	  long startTime = System.currentTimeMillis();
+	  long endTime = System.currentTimeMillis();
     try
     {
       HttpParams httpParams = new BasicHttpParams();
       HttpConnectionParams.setConnectionTimeout(httpParams, 40000);
       HttpClient httpclient = new DefaultHttpClient(httpParams);
       HttpPost httpPost = getHttpRequest(xmlString, esbUri, esbUsername, esbPassword);
-      return httpclient.execute(httpPost);
+      startTime = System.currentTimeMillis();
+      httpResponse =httpclient.execute(httpPost);
     }
     catch (ClientProtocolException e)
     {
@@ -93,8 +98,12 @@ public class ESBHelper
     }
     finally
     {
-      // uhgEsbRequestTransactionHandler.postESBCallProcess();
+      endTime = System.currentTimeMillis();
     }
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("httpResponse" , httpResponse);
+    jsonObject.put("executionTime", (endTime - startTime));
+    return jsonObject;
   }
 
   public static HttpPost getHttpRequest(

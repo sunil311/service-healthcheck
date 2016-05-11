@@ -19,6 +19,7 @@ public class WebServiceHistory {
 	private String status;
 	private Date lastStatusTime;
 	private Integer webServiceId;
+	private Long executionTime;
 
 	public String getServiceName() {
 		return serviceName;
@@ -68,5 +69,13 @@ public class WebServiceHistory {
 
 	public void setWebServiceId(Integer webServiceId) {
 		this.webServiceId = webServiceId;
+	}
+
+	public Long getExecutionTime() {
+		return executionTime;
+	}
+
+	public void setExecutionTime(Long executionTime) {
+		this.executionTime = executionTime;
 	}
 }

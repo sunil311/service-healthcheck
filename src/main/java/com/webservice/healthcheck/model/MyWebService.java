@@ -18,6 +18,7 @@ public class MyWebService
   private String serviceUrl;
   private String userId;
   private String password;
+  private Long executionTime;
 
   public String getServiceName()
   {
@@ -78,5 +79,13 @@ public class MyWebService
   {
     this.password = password;
   }
+
+public Long getExecutionTime() {
+	return executionTime;
+}
+
+public void setExecutionTime(Long executionTime) {
+	this.executionTime = executionTime;
+}
 
 }
