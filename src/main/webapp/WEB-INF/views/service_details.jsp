@@ -53,6 +53,7 @@
 								<th>Service URL</th>
 								<th>Service Status</th>
 								<th>Last Status Check Time</th>
+								<th>Execution Time</th>
 								<th>Details</th>
 							</tr>
 						</thead>
@@ -64,6 +65,7 @@
 										<td>${service.serviceUrl }</td>
 										<td>${service.status }</td>
 										<td>${service.lastStatusTime }</td>
+										<td>${service.executionTime }</td>
 										<td><a
 											href="getServiceStatusDetails?serviceId=${service.webServiceId }">Get
 												Details</a>

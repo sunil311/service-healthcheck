@@ -25,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.connecture.integration.esb.model.ESBResponse;
@@ -67,7 +68,7 @@ public class ESBHelper
     String xmlString,
     String esbUri,
     String esbUsername,
-    String esbPassword) throws SocketTimeoutException
+    String esbPassword) throws SocketTimeoutException, JSONException
   {
     // uhgEsbRequestTransactionHandler.preESBCallProcess();
 	  HttpResponse httpResponse =null;
@@ -102,7 +103,7 @@ public class ESBHelper
     }
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("httpResponse" , httpResponse);
-    jsonObject.put("executionTime", (endTime - startTime));
+    jsonObject.put("executionTime", (endTime - startTime)/1000);
     return jsonObject;
   }
 

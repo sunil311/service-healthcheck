@@ -62,7 +62,7 @@ public class ServicehealthCheckController
     String serviceName,
     String serviceUrl,
     String servicePassword,
-    String serviceUserId) throws IOException, JAXBException, UnexpectedProcessException
+    String serviceUserId) throws IOException, JAXBException, UnexpectedProcessException, JSONException
   {
     servicehealthcheckProcess.addService(serviceName, serviceUrl, serviceUserId, servicePassword);
     return "redirect:service_config";

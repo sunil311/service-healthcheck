@@ -48,10 +48,11 @@ public class ServicehealthcheckProcess {
 	 * @throws IOException
 	 * @throws UnexpectedProcessException
 	 * @throws JAXBException
+	 * @throws JSONException 
 	 */
 	public void addService(String serviceName, String serviceUrl,
 			String serviceUserId, String servicePassword) throws IOException,
-			JAXBException, UnexpectedProcessException {
+			JAXBException, UnexpectedProcessException, JSONException {
 		MyWebService wbService = new MyWebService();
 		wbService.setServiceName(serviceName);
 		wbService.setServiceUrl(serviceUrl);
@@ -71,12 +72,13 @@ public class ServicehealthcheckProcess {
 	 * @param esbUsername
 	 * @param esbPassword
 	 * @return
+	 * @throws JSONException 
 	 * @throws UnexpectedProcessException
 	 * @throws JAXBException
 	 * @throws IOException
 	 */
 	public static JSONObject getStatus(String xmlString, String esbUri,
-			String esbUsername, String esbPassword) {
+			String esbUsername, String esbPassword) throws JSONException {
 		String status = "Failure";
 		ValidateQuoteResult validateQuoteResult = new ValidateQuoteResult();
 		JSONObject jsonObject = new JSONObject();
@@ -155,7 +157,7 @@ public class ServicehealthcheckProcess {
 		List<MyWebService> webServices = new ArrayList<MyWebService>();
 		if (myWebServices != null) {
 			for (MyWebService myWebService : myWebServices) {
-				if (!("Failure".equalsIgnoreCase(myWebService.getStatus()))) {
+				if (!("Success".equalsIgnoreCase(myWebService.getStatus()))) {
 					webServices.add(myWebService);
 				}
 			}
