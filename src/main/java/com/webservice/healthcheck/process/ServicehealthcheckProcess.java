@@ -135,6 +135,7 @@ public class ServicehealthcheckProcess {
 		} catch (Exception e) {
 			LOGGER.error(e);
 			status = "Failure";
+			jsonObject.put("executionTime", 0L);
 		}
 		jsonObject.put("status", status);
 		return jsonObject;
