@@ -222,11 +222,11 @@ public class ServicehealthcheckProcess {
 			List<MyWebService> runningServices) throws JSONException {
 		JSONArray array = new JSONArray();
 		for (MyWebService myWebService : runningServices) {
-			array.put(new JSONArray("['" + myWebService.getServiceName()
+			array.put(new JSONArray("['" + myWebService.getServiceUrl()
 					+ "', 1, 'green']"));
 		}
 		for (MyWebService myWebService : stoppedServices) {
-			array.put(new JSONArray("['" + myWebService.getServiceName()
+			array.put(new JSONArray("['" + myWebService.getServiceUrl()
 					+ "', 1, 'red']"));
 		}
 		return array;

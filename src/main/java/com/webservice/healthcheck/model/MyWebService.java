@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SERVICES")
+@Table(name = "MY_SERVICES")
 public class MyWebService
 {
   @Id

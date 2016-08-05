@@ -14,6 +14,15 @@ public class DataSourceFactory {
 	public static DataSource getSQLDataSource(Properties databaseProperties) {
 		BasicDataSource dataSource = null;
 
+		if ("org.hibernate.dialect.SQLServerDialect".equalsIgnoreCase(databaseProperties.getProperty("jdbc.dialact"))) {
+      dataSource = new OracleDataSource(databaseProperties
+          .getProperty("database.username"),databaseProperties
+          .getProperty("database.password"),"com.jnetdirect.jsql.JSQLDriver","jdbc:JSQLConnect://"
+          + databaseProperties.getProperty("database.host") + ":"
+          + databaseProperties.getProperty("database.port") + "/"+"database="
+          + databaseProperties.getProperty("database.name"));
+    }
+		
 		if ("org.hibernate.dialect.MySQLDialect".equalsIgnoreCase(databaseProperties.getProperty("jdbc.dialact"))) {
 			dataSource = new MySQLDataSource(databaseProperties
 					.getProperty("database.username"),databaseProperties
