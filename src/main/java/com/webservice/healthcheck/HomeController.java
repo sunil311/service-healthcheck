@@ -31,7 +31,7 @@ public class HomeController {
 	 * @throws IOException 
 	 * @throws UnexpectedProcessException 
 	 */
-	@RequestMapping(value = { "loggedMeIn" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "loggedMeIn" }, method = RequestMethod.POST)
 	public String loggedMeIn(String username, String password, ModelMap modelMap) throws Exception {
 		if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
 			modelMap.put("message", "Invalid Credentials!");
