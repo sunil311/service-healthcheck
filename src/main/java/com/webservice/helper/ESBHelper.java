@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -71,9 +73,9 @@ public class ESBHelper
     String esbPassword) throws SocketTimeoutException, JSONException
   {
     // uhgEsbRequestTransactionHandler.preESBCallProcess();
-	  HttpResponse httpResponse =null;
-	  long startTime = System.currentTimeMillis();
-	  long endTime = System.currentTimeMillis();
+    HttpResponse httpResponse = null;
+    long startTime = System.currentTimeMillis();
+    long endTime = System.currentTimeMillis();
     try
     {
       HttpParams httpParams = new BasicHttpParams();
@@ -81,7 +83,7 @@ public class ESBHelper
       HttpClient httpclient = new DefaultHttpClient(httpParams);
       HttpPost httpPost = getHttpRequest(xmlString, esbUri, esbUsername, esbPassword);
       startTime = System.currentTimeMillis();
-      httpResponse =httpclient.execute(httpPost);
+      httpResponse = httpclient.execute(httpPost);
     }
     catch (ClientProtocolException e)
     {
@@ -102,8 +104,8 @@ public class ESBHelper
       endTime = System.currentTimeMillis();
     }
     JSONObject jsonObject = new JSONObject();
-    jsonObject.put("httpResponse" , httpResponse);
-    jsonObject.put("executionTime", (endTime - startTime)/1000);
+    jsonObject.put("httpResponse", httpResponse);
+    jsonObject.put("executionTime", (endTime - startTime) / 1000);
     return jsonObject;
   }
 
@@ -146,12 +148,18 @@ public class ESBHelper
 
   }
 
-  public static String getXMLasString() throws FileNotFoundException, IOException
+  public static String getXMLasString(String fileName) throws FileNotFoundException, IOException
   {
-    /*File xmlFile = new File(
-      "E:\\jboss-5.1.0.GA\\filestore\\integration\\37371\\20160321_124701_KEzCj_ESB_VALIDATE_QUOTE_REQUEST_Q37371.xml");*/
-    File xmlFile = new File(
-      "C:\\temp\\VALIDATE_QUOTE_REQUEST.xml");
+
+    File xmlFile = null;
+    try
+    {
+      xmlFile = new File(new URI(fileName));
+    }
+    catch (URISyntaxException e)
+    {
+      e.printStackTrace();
+    }
     Reader fileReader = new FileReader(xmlFile);
     BufferedReader bufReader = new BufferedReader(fileReader);
     StringBuilder sb = new StringBuilder();
@@ -164,4 +172,5 @@ public class ESBHelper
     String xml2String = sb.toString();
     return xml2String;
   }
+
 }

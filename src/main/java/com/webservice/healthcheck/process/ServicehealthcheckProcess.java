@@ -25,6 +25,7 @@ import com.webservice.healthcheck.dao.ServicehealthcheckDao;
 import com.webservice.healthcheck.dao.ServicehealthcheckHistoryDao;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.model.WebServiceHistory;
+import com.webservice.healthcheck.provider.ResourceLocator;
 import com.webservice.helper.ESBHelper;
 
 @Service
@@ -35,6 +36,9 @@ public class ServicehealthcheckProcess {
 	@Autowired
 	ServicehealthcheckHistoryDao servicehealthcheckHistoryDao;
 
+	@Autowired
+  ResourceLocator resourceLocator;
+	
 	private static final Log LOGGER = LogFactory.getLog(ESBHelper.class);
 	public static final String SERVICE_DOWN_STATUS_CODE = "800"; // either ESB
 																	// or
@@ -58,7 +62,7 @@ public class ServicehealthcheckProcess {
 		wbService.setServiceUrl(serviceUrl);
 		wbService.setUserId(serviceUserId);
 		wbService.setPassword(servicePassword);
-		String xml2String = ESBHelper.getXMLasString();
+		String xml2String = ESBHelper.getXMLasString(resourceLocator.getCompleteFIleName());
 		JSONObject httpResponceJson = getStatus(xml2String, serviceUrl,
 				serviceUserId, servicePassword);
 		wbService.setStatus(httpResponceJson.getString("status"));

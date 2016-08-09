@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.webservice.exception.UnexpectedProcessException;
 import com.webservice.healthcheck.model.MyWebService;
 import com.webservice.healthcheck.process.ServicehealthcheckProcess;
+import com.webservice.healthcheck.provider.ResourceLocator;
 import com.webservice.helper.ESBHelper;
 
 @Service
@@ -24,7 +25,10 @@ public class ServicehealthcheckDao
 {
   @Autowired
   SessionFactory sessionFactory;
-
+  
+  @Autowired
+  ResourceLocator resourceLocator;
+  
   /**
    * @return
    * @throws IOException
@@ -42,9 +46,7 @@ public class ServicehealthcheckDao
     List<MyWebService> myWebServices = (List<MyWebService>) criteria.list();
     transaction.commit();
     session.close();
-
-    String xml2String = ESBHelper.getXMLasString();
-
+    String xml2String = ESBHelper.getXMLasString(resourceLocator.getCompleteFIleName());
     for (MyWebService myWebService : myWebServices)
     {
       /*
