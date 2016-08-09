@@ -151,7 +151,7 @@ public class ESBHelper
     /*File xmlFile = new File(
       "E:\\jboss-5.1.0.GA\\filestore\\integration\\37371\\20160321_124701_KEzCj_ESB_VALIDATE_QUOTE_REQUEST_Q37371.xml");*/
     File xmlFile = new File(
-      "E:\\jboss-5.1.0.GA\\filestore\\integration\\78631\\20160804_155219_pKClA_ESB_VALIDATE_QUOTE_REQUEST_Q78631.xml");
+      "C:\\temp\\VALIDATE_QUOTE_REQUEST.xml");
     Reader fileReader = new FileReader(xmlFile);
     BufferedReader bufReader = new BufferedReader(fileReader);
     StringBuilder sb = new StringBuilder();

@@ -14,7 +14,7 @@
                         <h2 class="panel-title">Please Sign In</h2>
                     </div>
                     <div class="panel-body">
-                        <form role="form" action="loggedMeIn">
+                        <form role="form" action="loggedMeIn" method="post">
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" type="text" name="username" placeholder="Enter username" autofocus="">
