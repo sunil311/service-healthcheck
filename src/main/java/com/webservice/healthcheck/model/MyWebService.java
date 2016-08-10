@@ -88,4 +88,11 @@ public void setExecutionTime(Long executionTime) {
 	this.executionTime = executionTime;
 }
 
+@Override
+public String toString() {
+	return "MyWebService [id=" + id + ", serviceName=" + serviceName
+			+ ", status=" + status + ", serviceUrl=" + serviceUrl + ", userId="
+			+ userId + "]";
+}
+
 }

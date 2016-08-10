@@ -16,8 +16,8 @@
 	$(function() {
 		$("#dialog-form").dialog({
 			autoOpen : false,
-       
-            width:600
+
+			width : 600
 		});
 		$("#add_new_service").click(function() {
 			$("#dialog-form").dialog("open");
@@ -34,93 +34,131 @@
 </style>
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
+	<jsp:include page="header.jsp"></jsp:include>
 	<div class="container">
 		<div class="inner-container">
-		<div class="heading">
-			<h1 class="page-header">Services</h1>
-		</div>
-			<div class="service">
-						
-							<a href="#myModal" class="btn btn-lg btn-primary" data-toggle="modal">Add new service</a>
-	<div>
-		<table id="serviceTable" class="display table">
-			<thead>
-				<tr>
-					<th>Service Name</th>
-					<th>Service URL</th>
-					<th>Service UserId</th>
-					<th></th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${serviceList }" var="service">
-					<tr>
-						<td>${service.serviceName}</td>
-						<td>${service.serviceUrl }</td>
-						<td>${service.userId }</td>
-						<td><a href="">Edit</a></td>
-						<td><a href="removeService?id=${service.id }">Remove</a></td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
-			
+			<div class="heading">
+				<h1 class="page-header">Services</h1>
 			</div>
-	
+			<div class="service">
+				<a href="#myModal" class="btn btn-lg btn-primary"
+					data-toggle="modal">Add new service</a> <a href=""
+					class="btn btn-lg btn-primary" data-toggle="modal">Export
+					Service Report</a> <a href="#mailModal"
+					class="btn btn-lg btn-primary" data-toggle="modal">Send Over
+					the mail</a>
+			</div>
+			<div>
+				<table id="serviceTable" class="display table">
+					<thead>
+						<tr>
+							<th>Service Name</th>
+							<th>Service URL</th>
+							<th>Service UserId</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${serviceList }" var="service">
+							<tr>
+								<td>${service.serviceName}</td>
+								<td>${service.serviceUrl }</td>
+								<td>${service.userId }</td>
+								<td><a href="">Edit</a>
+								</td>
+								<td><a href="removeService?id=${service.id }">Remove</a>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
 		</div>
-</div>
-	
-	
+
+	</div>
+
 	<div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Add new service</h4>
-                </div>
-                <div class="modal-body">
-                
-                
-                
-                    <form  action="addService">
-        <div class="form-group">
-            <label for="serviceName" class="control-label ">Service Name</label>
-            <div class="">
-                <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="Service Name">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="serviceUrl" class="control-label">Service URL</label>
-            <div class="">
-                <input type="text" class="form-control" id="serviceUrl" name="serviceUrl" placeholder="Service URL">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="serviceUserId" class="control-label">User Name</label>
-            <div class="">
-                <input type="text" class="form-control" id="serviceUserId" name="serviceUserId" placeholder="Service User Id">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="servicePassword" class="control-label">Password</label>
-            <div class="">
-                <input type="text" class="form-control" id="servicePassword" name="servicePassword" placeholder="Service Password">
-            </div>
-        </div>
-       
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" tabindex="-1" value="Add Service" class="btn btn-primary">Add Service </button>
-                       </form>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add new service</h4>
+				</div>
+				<div class="modal-body">
+					<form action="addService">
+						<div class="form-group">
+							<label for="serviceName" class="control-label ">Service
+								Name</label>
+							<div class="">
+								<input type="text" class="form-control" id="serviceName"
+									name="serviceName" placeholder="Service Name">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">Close</button>
+							<button type="submit" tabindex="-1" value="Add Service"
+								class="btn btn-primary">Add Service</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add new service</h4>
+				</div>
+				<div class="modal-body">
+					<form action="addService">
+						<div class="form-group">
+							<label for="serviceName" class="control-label ">Service
+								Name</label>
+							<div class="">
+								<input type="text" class="form-control" id="serviceName"
+									name="serviceName" placeholder="Service Name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="serviceUrl" class="control-label">Service URL</label>
+							<div class="">
+								<input type="text" class="form-control" id="serviceUrl"
+									name="serviceUrl" placeholder="Service URL">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="serviceUserId" class="control-label">User
+								Name</label>
+							<div class="">
+								<input type="text" class="form-control" id="serviceUserId"
+									name="serviceUserId" placeholder="Service User Id">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="servicePassword" class="control-label">Password</label>
+							<div class="">
+								<input type="text" class="form-control" id="servicePassword"
+									name="servicePassword" placeholder="Service Password">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" tabindex="-1" value="Add Service"
+						class="btn btn-primary">Add Service</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
