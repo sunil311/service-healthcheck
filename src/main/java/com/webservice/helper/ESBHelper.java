@@ -135,9 +135,9 @@ public class ESBHelper {
 
 		File xmlFile = null;
 		try {
-			// xmlFile = new File(new URI(fileName));
-			xmlFile = new File(
-					"/home/kuldeep/data/java/projects/sunil/service-healthcheck/src/filestore/requestXML/VALIDATE_QUOTE_REQUEST.xml");
+			 xmlFile = new File(new URI(fileName));
+			/*xmlFile = new File(
+					"/home/kuldeep/data/java/projects/sunil/service-healthcheck/src/filestore/requestXML/VALIDATE_QUOTE_REQUEST.xml");*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
