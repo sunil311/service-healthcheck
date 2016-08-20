@@ -41,10 +41,9 @@
 				<h1 class="page-header">Services Details For Last 24 Hour</h1>
 			</div>
 			<div class="service">
-			 <a href=""class="btn btn-lg btn-primary" data-toggle="modal">Export
-					Service Report</a> <a href="#mailModal"
-					class="btn btn-lg btn-primary" data-toggle="modal">Send Over
-					the mail</a>
+			 <a href="publishReport/docx" class="btn btn-lg btn-primary" data-toggle="modal">Export Service Report as Docx</a>
+			 <a href="publishReport/pdf" class="btn btn-lg btn-primary" data-toggle="modal">Export Service Report as PDF</a>
+			 <a href="publishReport/mail" class="btn btn-lg btn-primary" data-toggle="modal">Send Over the mail</a>
 			</div>
 			<!-- <h3 class="page-header">
 				<a href="sendnotification">Click Here </a> to Send webservice status

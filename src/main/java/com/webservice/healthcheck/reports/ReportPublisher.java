@@ -1,17 +1,12 @@
 package com.webservice.healthcheck.reports;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
-import org.codehaus.jettison.json.JSONException;
-
-import com.webservice.exception.UnexpectedProcessException;
-import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.model.WebServiceHistory;
+import com.webservice.healthcheck.provider.ResourceLocator;
 
 public interface ReportPublisher {
-	void publish(List<MyWebService> services)
-			throws UnexpectedProcessException, IOException, JAXBException,
-			JSONException;
+	void publish(Map<Integer, List<WebServiceHistory>> servicesMap,
+			ResourceLocator resourceLocator);
 }

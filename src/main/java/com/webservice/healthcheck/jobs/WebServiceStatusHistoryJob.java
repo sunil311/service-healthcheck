@@ -43,7 +43,7 @@ public class WebServiceStatusHistoryJob
     throws IOException, JAXBException, UnexpectedProcessException, JSONException
   {
     List<MyWebService> webServices = servicehealthcheckDao.getRegisteredService();
-    saveWebserviceHistory(webServices);
+    //saveWebserviceHistory(webServices);
   }
 
   /**

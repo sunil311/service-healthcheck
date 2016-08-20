@@ -8,9 +8,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,9 +39,10 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.connecture.integration.esb.model.ESBResponse;
 import com.webservice.exception.UnexpectedProcessException;
-import com.webservice.healthcheck.model.MyWebService;
+import com.webservice.healthcheck.model.WebServiceHistory;
 import com.webservice.healthcheck.process.IOUtils;
 import com.webservice.healthcheck.process.JAXBContextHolder;
+import com.webservice.healthcheck.reports.ReportsType;
 
 public class ESBHelper {
 	protected static final String AUTHORIZATION_HEADER = "Authorization";
@@ -135,9 +142,9 @@ public class ESBHelper {
 
 		File xmlFile = null;
 		try {
-			 xmlFile = new File(new URI(fileName));
-			/*xmlFile = new File(
-					"/home/kuldeep/data/java/projects/sunil/service-healthcheck/src/filestore/requestXML/VALIDATE_QUOTE_REQUEST.xml");*/
+			// xmlFile = new File(new URI(fileName));
+			xmlFile = new File(
+					"/home/kuldeep/data/java/projects/sunil/service-healthcheck/src/filestore/requestXML/VALIDATE_QUOTE_REQUEST.xml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -153,8 +160,48 @@ public class ESBHelper {
 		return xml2String;
 	}
 
-	public static String createReport(List<MyWebService> services) {
-		return services.toString();
+	public static File prepareDocxReportFile() {
+		File file = new File("");
+		return file;
 	}
 
+	public static String createReport(
+			Map<Integer, List<WebServiceHistory>> servicesMap) {
+		return servicesMap.toString();
+	}
+
+	/**
+	 * Creates a PDF document.
+	 * 
+	 * @param filename
+	 *            the path to the new PDF document
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	public void createPdf(String filename) throws DocumentException,
+			IOException {
+		// step 1
+		Document document = new Document();
+		// step 2
+		PdfWriter.getInstance(document, new FileOutputStream(filename));
+		// step 3
+		document.open();
+		// step 4
+		document.add(new Paragraph("Hello World!"));
+		// step 5
+		document.close();
+	}
+
+	public static ReportsType createReportType(String reportFormat) {
+		if (ReportsType.REPORT_DOCX.getReportTypeName().equals(reportFormat)) {
+			return ReportsType.REPORT_DOCX;
+		} else if (ReportsType.REPORT_PDF.getReportTypeName().equals(
+				reportFormat)) {
+			return ReportsType.REPORT_PDF;
+		} else if (ReportsType.REPORT_MAIL.getReportTypeName().equals(
+				reportFormat)) {
+			return ReportsType.REPORT_MAIL;
+		}
+		return null;
+	}
 }

@@ -8,35 +8,51 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @PropertySource("classpath:config.properties")
+public class ResourceLocator {
 
-public class ResourceLocator
-{
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 
-  @Bean
-  public static PropertySourcesPlaceholderConfigurer propertyConfigInDev()
-  {
-    return new PropertySourcesPlaceholderConfigurer();
-  }
+	@Value("${healthcheck.filestore}")
+	private String fileStore;
 
-  @Value("${healthcheck.filestore}")
-  private String fileStore;
+	@Value("${healthcheck.filestore.filename}")
+	private String fileName;
 
-  @Value("${healthcheck.filestore.filename}")
-  private String fileName;
+	@Value("${healthcheck.reports.receiverMails}")
+	private String reportReceiverMails;
 
-  public String getCompleteFIleName()
-  {
-    return getFileStore() + getFileName();
-  }
+	@Value("${healthcheck.reports.tempReport}")
+	private String tempReport;
 
-  public String getFileStore()
-  {
-    return fileStore;
-  }
+	public String getCompleteFIleName() {
+		return getFileStore() + getFileName();
+	}
 
-  public String getFileName()
-  {
-    return fileName;
-  }
+	public String getFileStore() {
+		return fileStore;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public String getReportReceiverMails() {
+		return reportReceiverMails;
+	}
+
+	public void setReportReceiverMails(String reportReceiverMails) {
+		this.reportReceiverMails = reportReceiverMails;
+	}
+
+	public String getTempReport() {
+		return tempReport;
+	}
+
+	public void setTempReport(String tempReport) {
+		this.tempReport = tempReport;
+	}
 
 }

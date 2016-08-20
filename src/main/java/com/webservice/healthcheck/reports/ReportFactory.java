@@ -1,7 +1,10 @@
 package com.webservice.healthcheck.reports;
 
+import org.springframework.stereotype.Service;
+
 import com.webservice.exception.ReportPublisherException;
 
+@Service
 public class ReportFactory {
 	public ReportPublisher getReportPublisher(ReportsType reportsType)
 			throws ReportPublisherException {
