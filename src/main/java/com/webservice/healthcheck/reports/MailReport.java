@@ -28,36 +28,26 @@ public class MailReport implements ReportPublisher {
 		String reportReceivers[] = resourceLocator.getReportReceiverMails()
 				.split(",");
 
-		final String user = "kdmalviyan@gmail.com";
-		final String password = "kds@2015";
+		final String user = "";
+		final String password = "";
 		Properties props = new Properties();
-		/*
-		 * String host = "smtp.gmail.com"; String port = "587"; String
-		 * SSLProtocol = "OFF"; String TLSProtocol = "ON";
-		 * props.setProperty("mail.smtp.host", host);
-		 * props.put("mail.smtp.auth", "true"); props.put(SSLProtocol,
-		 * SSLProtocol); props.put(port, port); props.put(TLSProtocol,
-		 * TLSProtocol);
-		 */
-		/*props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class",
 				"javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "465");*/
+		props.put("mail.smtp.port", "465");
 
-		/*
-		 * Session session = Session.getDefaultInstance(props, new
-		 * javax.mail.Authenticator() { protected PasswordAuthentication
-		 * getPasswordAuthentication() { return new PasswordAuthentication(user,
-		 * password); } });
-		 */
-		Session session = Session.getDefaultInstance(props, null);
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, password);
+					}
+				});
 
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(
-					"healthservicereports@connecture.com"));
+			msg.setFrom(new InternetAddress(user));
 			for (String reportReceiver : reportReceivers) {
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						reportReceiver));
