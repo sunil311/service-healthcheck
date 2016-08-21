@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.webservice.healthcheck.model.WebServiceHistory;
@@ -45,7 +46,14 @@ public class PDFReport implements ReportPublisher {
 		Document document = new Document();
 		PdfWriter.getInstance(document, new FileOutputStream(filename));
 		document.open();
-		document.add(new Paragraph(ESBHelper.createReport(servicesMap)));
+		document.addCreationDate();
+		document.setMargins(2, 4, 2, 4);
+		document.setPageSize(PageSize.A4);
+		List<Paragraph> paragraphs = ESBHelper.createPDFReport(servicesMap);
+		for (Paragraph paragraph : paragraphs) {
+			document.add(paragraph);
+		}
+
 		document.close();
 	}
 }

@@ -62,7 +62,7 @@ public class MailReport implements ReportPublisher {
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						reportReceiver));
 				msg.setSubject("Webservice Health Check Report");
-				msg.setText(ESBHelper.createReport(servicesMap));
+				msg.setText(ESBHelper.createDocxReport(servicesMap));
 				Transport.send(msg);
 			}
 		} catch (AddressException e) {

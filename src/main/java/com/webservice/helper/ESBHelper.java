@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -31,6 +33,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.connecture.integration.esb.model.ESBResponse;
+import com.itextpdf.text.Paragraph;
 import com.webservice.exception.UnexpectedProcessException;
 import com.webservice.healthcheck.model.WebServiceHistory;
 import com.webservice.healthcheck.process.IOUtils;
@@ -47,6 +50,8 @@ public class ESBHelper {
 	public static final String EXTERNAL_ENDPOINT_ERROR_MESSAGE = "The UHG Service is Down at the moment. Please try again later.";
 
 	private static final Log LOGGER = LogFactory.getLog(ESBHelper.class);
+	private static final String DOUBLE_TABS = "\t\t";
+	private static final String NEW_LINE = "\n";
 
 	public static boolean isSuccessfulEsbResponseCode(String esbResponseCode) {
 		return SUCCESSFUL_ESB_RESPONSE_CODE.equals(esbResponseCode);
@@ -153,9 +158,39 @@ public class ESBHelper {
 		return xml2String;
 	}
 
-	public static String createReport(
+	public static String createDocxReport(
 			Map<Integer, List<WebServiceHistory>> servicesMap) {
-		return servicesMap.toString();
+		StringBuilder reportString = new StringBuilder(DOUBLE_TABS
+				+ "Webservices Health service Report" + NEW_LINE);
+		String serviceName = "";
+		String header = "Service Status" + DOUBLE_TABS + "Status Check Time"
+				+ NEW_LINE;
+		StringBuilder serviceDetails = new StringBuilder();
+		if (servicesMap == null || servicesMap.size() == 0) {
+			reportString
+					.append(NEW_LINE
+							+ "There is no webservice available toreport..."
+							+ NEW_LINE);
+		} else {
+			Set<Integer> keySet = servicesMap.keySet();
+			for (Integer key : keySet) {
+				List<WebServiceHistory> serviceHistories = servicesMap.get(key);
+				for (WebServiceHistory history : serviceHistories) {
+					if (serviceName.equals("")) {
+						serviceName = history.getServiceName() + " ("
+								+ history.getServiceUrl() + ")";
+					}
+					serviceDetails.append(history.getStatus() + DOUBLE_TABS
+							+ history.getLastStatusTime() + NEW_LINE);
+				}
+			}
+		}
+		if (!serviceName.equals("")) {
+			reportString.append(header);
+			reportString.append(NEW_LINE + serviceName + ":" + NEW_LINE);
+		}
+		reportString.append(serviceDetails);
+		return reportString.toString();
 	}
 
 	public static ReportsType createReportType(String reportFormat) {
@@ -169,5 +204,44 @@ public class ESBHelper {
 			return ReportsType.REPORT_MAIL;
 		}
 		return null;
+	}
+
+	public static List<Paragraph> createPDFReport(
+			Map<Integer, List<WebServiceHistory>> servicesMap) {
+		List<Paragraph> paragraphs = new ArrayList<Paragraph>();
+
+		StringBuilder reportString = new StringBuilder(DOUBLE_TABS
+				+ "Webservices Health service Report" + NEW_LINE);
+		String serviceName = "";
+		String header = "Service Status" + DOUBLE_TABS + "Status Check Time"
+				+ NEW_LINE;
+		StringBuilder serviceDetails = new StringBuilder();
+		if (servicesMap == null || servicesMap.size() == 0) {
+			reportString
+					.append(NEW_LINE
+							+ "There is no webservice available toreport..."
+							+ NEW_LINE);
+			paragraphs.add(new Paragraph(reportString.toString()));
+		} else {
+			Set<Integer> keySet = servicesMap.keySet();
+			for (Integer key : keySet) {
+				List<WebServiceHistory> serviceHistories = servicesMap.get(key);
+				for (WebServiceHistory history : serviceHistories) {
+					if (serviceName.equals("")) {
+						serviceName = history.getServiceName() + " ("
+								+ history.getServiceUrl() + ")";
+					}
+					serviceDetails.append(history.getStatus() + DOUBLE_TABS
+							+ history.getLastStatusTime() + NEW_LINE);
+				}
+				paragraphs.add(new Paragraph(serviceDetails.toString()));
+			}
+		}
+		if (!serviceName.equals("")) {
+			reportString.append(header);
+			reportString.append(NEW_LINE + serviceName + ":" + NEW_LINE);
+			paragraphs.add(0, new Paragraph(reportString.toString()));
+		}
+		return paragraphs;
 	}
 }

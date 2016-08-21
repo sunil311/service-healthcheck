@@ -24,7 +24,7 @@ public class DocxReport implements ReportPublisher {
 		XWPFDocument document = new XWPFDocument();
 		XWPFParagraph paragraph = document.createParagraph();
 		XWPFRun run = paragraph.createRun();
-		run.setText(ESBHelper.createReport(servicesMap));
+		run.setText(ESBHelper.createDocxReport(servicesMap));
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(new File(resourceLocator.getTempReport()
